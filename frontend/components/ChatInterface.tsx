@@ -61,15 +61,15 @@ export default function ChatInterface() {
                 {history.length === 0 && (
                     <div className="text-center text-gray-400 mt-20">
                         <p>Ask a question about public records...</p>
-                        <p className="text-xs mt-2">Try: "What is the healthcare budget for Kisumu?"</p>
+                        <p className="text-xs mt-2">Try: &quot;What is the healthcare budget for Kisumu?&quot;</p>
                     </div>
                 )}
 
                 {history.map((msg, idx) => (
                     <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                         <div className={`max-w-[80%] p-3 rounded-lg ${msg.role === 'user'
-                                ? 'bg-blue-600 text-white rounded-br-none'
-                                : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm'
+                            ? 'bg-blue-600 text-white rounded-br-none'
+                            : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm'
                             }`}>
                             <p>{msg.content}</p>
                         </div>
