@@ -1,0 +1,8 @@
+requests
+beautifulsoup4
+pymupdf
+pinecone-client
+langchain
+langchain-community
+google-generativeai
+python-dotenv
