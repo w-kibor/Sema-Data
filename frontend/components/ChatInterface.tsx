@@ -8,6 +8,9 @@ interface Source {
     text: string;
     url?: string;
     thumbnailUrl?: string;
+    agency?: string;
+    publishDate?: string;
+    fileSize?: string;
 }
 
 interface Message {
@@ -55,8 +58,11 @@ export default function ChatInterface() {
                     title: 'Kenya Gazette Vol. CXXVI',
                     page: 18,
                     text: 'Sample reference snippet for transparency.',
-                    url: 'https://example.org/docs/kenya-gazette-vol-cxxvi.pdf',
-                    thumbnailUrl: 'https://placehold.co/240x320/png?text=Gazette+Preview',
+                    url: 'http://localhost:8000/pdfs/kenya-gazette-vol-cxxvi.pdf',
+                    thumbnailUrl: 'http://localhost:8000/thumbnails/kenya-gazette-vol-cxxvi.png',
+                    agency: 'Kenya Gazette Office',
+                    publishDate: '2024-01-18',
+                    fileSize: '3.2 MB',
                 },
             ],
         },
@@ -251,9 +257,15 @@ export default function ChatInterface() {
                                                             href={src.url ?? '#'}
                                                             target={src.url ? '_blank' : undefined}
                                                             rel={src.url ? 'noreferrer' : undefined}
-                                                            className="rounded-full border border-emerald-200/40 bg-emerald-200/10 px-3 py-1 text-[11px] text-emerald-100"
+                                                            className="group relative rounded-full border border-emerald-200/40 bg-emerald-200/10 px-3 py-1 text-[11px] text-emerald-100"
                                                         >
                                                             {src.title} p.{src.page}
+                                                            <span className="pointer-events-none absolute -top-2 left-1/2 hidden w-56 -translate-x-1/2 -translate-y-full rounded-xl border border-white/20 bg-slate-900/90 p-3 text-[11px] text-white/90 shadow-lg group-hover:block">
+                                                                <span className="block text-emerald-200">Source Details</span>
+                                                                <span className="mt-1 block">Agency: {src.agency ?? 'Unknown'}</span>
+                                                                <span className="block">Published: {src.publishDate ?? 'N/A'}</span>
+                                                                <span className="block">File size: {src.fileSize ?? 'N/A'}</span>
+                                                            </span>
                                                         </a>
                                                     ))}
                                                 </div>

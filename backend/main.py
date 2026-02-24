@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+from api.services.pdf import PDF_LIBRARY_DIR, THUMBNAIL_DIR
 
 app = FastAPI(
     title="Sema-Data API",
@@ -15,6 +18,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/pdfs", StaticFiles(directory=str(PDF_LIBRARY_DIR)), name="pdfs")
+app.mount("/thumbnails", StaticFiles(directory=str(THUMBNAIL_DIR)), name="thumbnails")
 
 @app.get("/")
 async def root():
