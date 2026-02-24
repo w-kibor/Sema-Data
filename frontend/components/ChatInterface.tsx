@@ -6,6 +6,8 @@ interface Source {
     title: string;
     page: number;
     text: string;
+    url?: string;
+    thumbnailUrl?: string;
 }
 
 interface Message {
@@ -49,7 +51,13 @@ export default function ChatInterface() {
             content:
                 'Welcome to Sema-Data. Ask about budgets, tenders, or gazettes. I will cite sources so you can verify every claim.',
             sources: [
-                { title: 'Kenya Gazette Vol. CXXVI', page: 18, text: 'Sample reference snippet for transparency.' },
+                {
+                    title: 'Kenya Gazette Vol. CXXVI',
+                    page: 18,
+                    text: 'Sample reference snippet for transparency.',
+                    url: 'https://example.org/docs/kenya-gazette-vol-cxxvi.pdf',
+                    thumbnailUrl: 'https://placehold.co/240x320/png?text=Gazette+Preview',
+                },
             ],
         },
     ]);
@@ -240,7 +248,9 @@ export default function ChatInterface() {
                                                     {msg.sources.map((src, i) => (
                                                         <a
                                                             key={`${src.title}-${i}`}
-                                                            href="#"
+                                                            href={src.url ?? '#'}
+                                                            target={src.url ? '_blank' : undefined}
+                                                            rel={src.url ? 'noreferrer' : undefined}
                                                             className="rounded-full border border-emerald-200/40 bg-emerald-200/10 px-3 py-1 text-[11px] text-emerald-100"
                                                         >
                                                             {src.title} p.{src.page}
@@ -249,10 +259,18 @@ export default function ChatInterface() {
                                                 </div>
                                                 <div className="grid gap-3 md:grid-cols-[120px_1fr]">
                                                     <div className="rounded-xl border border-white/20 bg-gradient-to-br from-emerald-300/20 to-white/10 p-3">
-                                                        <div className="flex h-full flex-col items-center justify-center text-xs text-emerald-100">
-                                                            <span className="text-lg font-semibold">PDF</span>
-                                                            <span>Preview</span>
-                                                        </div>
+                                                        {msg.sources[0].thumbnailUrl ? (
+                                                            <img
+                                                                src={msg.sources[0].thumbnailUrl}
+                                                                alt={`${msg.sources[0].title} preview`}
+                                                                className="h-full w-full rounded-lg object-cover"
+                                                            />
+                                                        ) : (
+                                                            <div className="flex h-full flex-col items-center justify-center text-xs text-emerald-100">
+                                                                <span className="text-lg font-semibold">PDF</span>
+                                                                <span>Preview</span>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     <div className="rounded-xl border border-white/10 bg-white/5 p-3 text-xs text-slate-200/80">
                                                         {msg.sources[0].text}
