@@ -7,7 +7,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import anyio
 import fitz
-import google.generativeai as genai
+import google.genai as genai
 
 from api.services.pdf import PDF_LIBRARY_DIR
 
@@ -61,8 +61,7 @@ class RAGService:
         if not self.pinecone_api_key or not self.pinecone_index:
             raise ValueError("PINECONE_API_KEY and PINECONE_INDEX are required")
 
-        genai.configure(api_key=self.gemini_api_key)
-        self.model = genai.GenerativeModel(self.model_name)
+        self.client = genai.Client(api_key=self.gemini_api_key)
         self._index = self._init_index()
         self._indexed = False
 
@@ -91,12 +90,11 @@ class RAGService:
         return pinecone.Index(self.pinecone_index)
 
     def _embed(self, text: str, task_type: str) -> List[float]:
-        result = genai.embed_content(
+        result = self.client.models.embed_content(
             model=self.embedding_model,
-            content=text,
-            task_type=task_type,
+            contents=text,
         )
-        return result["embedding"]
+        return result.embedding
 
     def _extract_chunks(self, pdf_path: Path) -> Iterable[Tuple[int, str]]:
         doc = fitz.open(pdf_path)
@@ -127,7 +125,7 @@ class RAGService:
         for pdf_path in pdfs:
             title = pdf_path.stem.replace("_", " ")
             for chunk_idx, (page, chunk) in enumerate(self._extract_chunks(pdf_path)):
-                embedding = self._embed(chunk, task_type="retrieval_document")
+                embedding = self._embed(chunk, task_type="RETRIEVAL_DOCUMENT")
                 vector_id = f"{pdf_path.stem}-p{page}-c{chunk_idx}"
                 metadata = {
                     "file_name": pdf_path.name,
@@ -183,10 +181,13 @@ class RAGService:
         )
 
     def _get_response_sync(self, query: str) -> RAGResult:
-        query_vector = self._embed(query, task_type="retrieval_query")
+        query_vector = self._embed(query, task_type="RETRIEVAL_QUERY")
         contexts = self._query_index(query_vector)
         prompt = self._build_prompt(query, contexts)
-        response = self.model.generate_content(prompt)
+        response = self.client.models.generate_content(
+            model=self.model_name,
+            contents=prompt,
+        )
         answer = response.text or "I could not generate an answer from the current sources."
         sources = []
         for ctx in contexts:

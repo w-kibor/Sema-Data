@@ -4,9 +4,9 @@ pydantic
 langchain
 langchain-community
 pinecone-client
-google-generativeai
+google-genai
 python-dotenv
 python-multipart
-# Groq specific if needed, or just standard openai/langchain integration
 langchain-groq
 pymupdf
+anyio
