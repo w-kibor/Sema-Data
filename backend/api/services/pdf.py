@@ -72,3 +72,24 @@ def build_pdf_sources(base_url: str, limit: int = 3) -> List[dict]:
         )
 
     return sources
+
+
+def build_pdf_source(base_url: str, file_name: str, page: int, text: str) -> Optional[dict]:
+    pdf_path = PDF_LIBRARY_DIR / file_name
+    if not pdf_path.exists():
+        return None
+
+    stat = pdf_path.stat()
+    publish_date = datetime.fromtimestamp(stat.st_mtime).date().isoformat()
+    thumbnail_path = _ensure_thumbnail(pdf_path)
+
+    return {
+        "title": pdf_path.stem.replace("_", " "),
+        "page": page,
+        "text": text,
+        "url": f"{base_url}pdfs/{pdf_path.name}",
+        "thumbnailUrl": f"{base_url}thumbnails/{thumbnail_path.name}" if thumbnail_path else None,
+        "agency": _guess_agency(pdf_path.stem),
+        "publishDate": publish_date,
+        "fileSize": _format_size(stat.st_size),
+    }
