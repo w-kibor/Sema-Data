@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0f172a;
-  --foreground: #e5e7eb;
-  --card: rgba(255, 255, 255, 0.08);
-  --card-border: rgba(255, 255, 255, 0.18);
-  --glow: rgba(16, 185, 129, 0.22);
+  --background: #0b1020;
+  --foreground: #f4f0e8;
+  --card: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --glow: rgba(245, 158, 11, 0.18);
 }
 
 @theme inline {
@@ -23,9 +23,10 @@ body {
 }
 
 .app-shell {
-  background: radial-gradient(circle at top, rgba(16, 185, 129, 0.18), transparent 55%),
-    radial-gradient(circle at 30% 20%, rgba(15, 23, 42, 0.9), transparent 45%),
-    linear-gradient(180deg, #0f172a 0%, #111827 100%);
+  background: radial-gradient(circle at top, rgba(245, 158, 11, 0.16), transparent 52%),
+    radial-gradient(circle at 80% 10%, rgba(59, 130, 246, 0.12), transparent 34%),
+    radial-gradient(circle at 20% 20%, rgba(15, 23, 42, 0.85), transparent 42%),
+    linear-gradient(180deg, #0b1020 0%, #11182a 56%, #0f1422 100%);
 }
 
 .glass-card {
@@ -45,9 +46,9 @@ body {
     box-shadow: 0 0 0 0 var(--glow);
   }
   70% {
-    box-shadow: 0 0 0 18px rgba(16, 185, 129, 0);
+    box-shadow: 0 0 0 18px rgba(245, 158, 11, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
   }
 }
