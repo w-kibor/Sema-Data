@@ -10,3 +10,4 @@ python-multipart
 langchain-groq
 pymupdf
 anyio
+pytest
